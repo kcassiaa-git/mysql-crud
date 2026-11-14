@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import mysql from 'mysql2/promise';
 
@@ -7,11 +8,12 @@ app.use(express.json());
 
 const port = 3000;
 const pool = mysql.createPool({ //conexão com o sistema
-    host: 'localhost', //onde estamos hospedados
-    user: "root", //nome do meu usuário
-    password: '1234', //minha senha
-    database: 'usuarios',
-    port: 3306, //minha porta
+    host: process.env.DB_HOST, //onde estamos hospedados
+    user: process.env.DB_USER, //nome do meu usuário
+    password: process.env.DB_PASSWORD, //minha senha
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT, //minha porta
+    waitForConnections: true,
     connectionLimit: 10, //limite de conexões simultâneas
     queueLimit: 0, //limite da fila
 })
@@ -104,7 +106,6 @@ app.put('/users/:id', async(req,res) => {
         })
     }
 })
-
 
 app.listen(port, () => {
     console.log (`Servidor rodando na porta ${port}`);
